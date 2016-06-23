@@ -1,54 +1,59 @@
 import re
-
-
-def _check_pattern(patterns):
-    for pattern in patterns:
-        for player in ("X", "O"):
-            try:
-                if len(re.search(re.compile("[{}]+".format(player)), pattern).group(0)) == 3:
-                    return player
-            except AttributeError:
-                pass
+import itertools
 
 
 def checkio(game_result):
-    """First create a list of list which includes all patterns to check, i.e.
+    """First create a list of list which includes all sequences to check, i.e.
     rows, columns, diagonals. Then pass the list of lists to a function which
-    will test the patterns and return the result."""
+    will test the sequences and return the result.
 
-    patterns = []
+    @param game_result: a list of list containing the rows of the game board"""
 
-    # first check if any row has three signs by the same player
-    patterns = [row for row in game_result]
+    # create an empty list which will store all combinations we want to check
+    sequences = []
 
-    # ... then check the columns
+    # such as rows ...
+    sequences = [row for row in game_result]
+
+    # ... columns
     for c in range(3):
         element_list = []
         [element_list.extend(row[c]) for row in game_result]
-        patterns.extend(["".join(element_list)])
+        sequences.extend(["".join(element_list)])
 
-    # ... finally check the two diagonals
-    diagonal_list = []
-    n = 0
-    while n < 3:
-        for row in game_result:
-            diagonal_list.extend(row[n])
-            n += 1
-    patterns.extend(["".join(diagonal_list)])
+    # ... and the two diagonals
+    # for the main diagonal we will leverage the fact that the entries have row
+    # index equals to the column index
+    sequences.extend(["".join([game_result[n][n] for n in range(3)])])
+    # for the minor diagonal instead we have to set them separately
+    sequences.extend(["".join([game_result[r][c] for r, c
+                               in zip(range(2, -1, -1), range(3))])])
 
-    diagonal_list = []
-    n = 2
-    while n >= 0:
-        for row in game_result:
-            diagonal_list.extend(row[n])
-            n -= 1
-    patterns.extend(["".join(diagonal_list)])
+    # check if any of those sequences match any of the winning patterns
+    return check_pattern(sequences)
 
-    result = _check_pattern(patterns)
-    if result:
-        return result
-    else:
-        return "D"
+
+def check_pattern(sequences):
+    """Check if any of the sequences contains three consecutive entries from
+    the same player, which would identify the winner. If there is no winner,
+    return a *D*.
+
+    @param sequences: list of lists containing the sequences to check"""
+
+    result = "D"
+    for pattern in sequences:
+        for player in ("X", "O"):
+            try:
+                if len(re.search(re.compile("[{}]+".format(player)), pattern).group(0)) == 3:
+                    result = player
+            except AttributeError:
+                # an AttributeError is raised when we invoke the group method
+                # when no pattern has been found. Thus, this identifies a
+                # situation when none of the cells in the sequence was marked
+                # by the player
+                pass
+    return result
+
 
 
 if __name__ == '__main__':
