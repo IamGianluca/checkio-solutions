@@ -2,27 +2,27 @@ def longest_palindromic(text):
     """Find the longest palindromic substring of a given string.
 
     Args:
-        text: A string we will scan.
+        text: The string we will search to find the longest palindrome.
     Returns:
-        The longest palindromic substring. If more than a substring is found
+        The longest palindromic substring. If more than one substring is found
         returns the one which is closer to the beginning.
     """
     palindromes = []
     l = len(text)
 
-    # check if the entire word is a palindrome
+    # edge case, check if the entire word is composed by the same letter
+    # (i.e. "aaaa"), in that case the entire word is the longest palindrome
     first = text[0]
     if l == sum([1 if letter == first else 0 for letter in text]):
         return text
 
-    # find all palindromes
+    # find all palindromic substrings moving from left to right
     for i in range(l):
         pal = letter_check(idx=i, text=text)
         palindromes.extend([pal])
-    print(palindromes)
 
-    # find longest palindrome, in case more than one palindrome of max length,
-    # return the closer to the left
+    # find longest palindrome among all those we found; if there are than one
+    # palindrome of max length return the closer to the left
     sizes = [len(pal) for pal in palindromes]
     longest_size = max(sizes)
     for pal in palindromes:
@@ -31,14 +31,14 @@ def longest_palindromic(text):
 
 
 def letter_check(idx, text, offset=0):
-    """Check the adjacent letter to the one at index N, if the one immediatelly
-    "before and after are the same, keep searching until they are not.
+    """Check the adjacent letters to the one at index N, if the one immediatelly
+    before and after are the same, keep searching until they are not.
 
     Args:
-        n: the index where we want to start searching.
-        text: the word we want to search.
+        idx: The index where we want to start searching.
+        text: The word we want to search.
     Returns:
-        The length of the palyndromic substring, centered at index N.
+        The longest palindromic substring centered at index idx.
     """
     try:
         if text[idx-offset] == text[idx+offset]:
