@@ -24,12 +24,19 @@ class TestMin:
     def test_string(self):
         assert min('hello') == 'e'
 
-    def test_two_maximal_items(self):
-        """If multiple items are maximal (minimal), the function returns the
-        first one encountered.
+    def test_two_maximum_items(self):
+        """If multiple items are maximal, the function returns the first one
+        encountered.
         """
-        # import ipdb; ipdb.set_trace()
         assert max(2.2, 5.6, 5.9, key=int) == 5.6
+        assert max(2.2, 5.9, 5.6, key=int) == 5.9
+
+    def test_two_minimum_items(self):
+        """If multiple items are minimal, the function returns the first one
+        encountered.
+        """
+        assert min(2.4, 2.2, 5.9, key=int) == 2.4
+        assert min(2.2, 2.4, 5.6, key=int) == 2.2
 
     def test_minlambda(self):
         assert min([[1, 2], [3, 4], [9, 0]], key=lambda x: x[1]) == [9, 0]
