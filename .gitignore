@@ -1,1 +1,5 @@
+# vim temporary files
 *.swp
+
+# pytest cache
+.cache
