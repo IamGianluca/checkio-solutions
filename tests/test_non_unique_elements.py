@@ -1,6 +1,6 @@
 import pytest
 
-from home.non_unique_elements import non_unique
+from checkio.home.non_unique_elements import non_unique
 
 
 class TestNonUniqueElements:

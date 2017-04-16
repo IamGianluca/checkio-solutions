@@ -1,6 +1,6 @@
 import pytest
 
-from home.min_and_max import min, max
+from checkio.home.min_and_max import min, max
 
 
 @pytest.fixture(scope='function')
