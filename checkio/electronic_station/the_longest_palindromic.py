@@ -1,11 +1,11 @@
 def longest_palindromic(text):
-    """Find the longest palindromic substring of a given string.
+    """Find longest palindromic substring in a given string.
 
     Args:
-        text: The string we will search to find the longest palindrome.
+        text [string] : The string that needs to be scanned.
     Returns:
-        The longest palindromic substring. If more than one substring is found
-        returns the one which is closer to the beginning.
+        The longest palindromic substring [str]. If more than one substring is
+        found, returns the one which is closer to the beginning.
     """
     palindromes = []
     l = len(text)
@@ -35,10 +35,10 @@ def letter_check(idx, text, offset=0):
     before and after are the same, keep searching until they are not.
 
     Args:
-        idx: The index where we want to start searching.
-        text: The word we want to search.
+        idx [int]: The index where we want to start searching.
+        text [str]: The word we want to search.
     Returns:
-        The longest palindromic substring centered at index idx.
+        The longest palindromic substring [str] centered at index *idx*.
     """
     try:
         if text[idx-offset] == text[idx+offset]:
@@ -47,10 +47,3 @@ def letter_check(idx, text, offset=0):
             return text[idx-offset+1:idx+offset]
     except IndexError:
         return text[idx-offset:idx+offset-1]
-
-
-if __name__ == '__main__':
-    assert longest_palindromic("artrartrt") == "rtrartr", "The Longest"
-    assert longest_palindromic("abacada") == "aba", "The First"
-    assert longest_palindromic("aaaa") == "aaaa", "The A"
-    assert longest_palindromic("abc") == "a", "Not a palindrome"
